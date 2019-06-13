@@ -5,6 +5,9 @@ import (
 	"flag"
 	"fmt"
 	"database/sql"
+
+	_ "github.com/go-sql-driver/mysql"
+
 	"github.com/sanjid133/go-grpc-http-rest-microservice/pkg/service/v1"
 	"github.com/sanjid133/go-grpc-http-rest-microservice/pkg/protocol/grpc"
 )

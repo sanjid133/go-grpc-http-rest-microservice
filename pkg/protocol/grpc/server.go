@@ -7,6 +7,7 @@ import (
 	"google.golang.org/grpc"
 	"os"
 	"os/signal"
+	"log"
 )
 
 func RunServer(ctx context.Context, v1API v1.ToDoServiceServer, port string) error  {
@@ -28,5 +29,6 @@ func RunServer(ctx context.Context, v1API v1.ToDoServiceServer, port string) err
 		}
 	}()
 
+	log.Println("starting grpc server ...")
 	return server.Serve(listen)
 }
