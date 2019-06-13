@@ -35,3 +35,27 @@ $ go build .
 $ ./client -server=localhost:808
 ```
 
+
+
+Tutorials:
+
+1. https://grpc.io/docs/tutorials/basic/go/
+
+
+REST:
+
+
+Run
+```bash
+$ cd cmd/server
+$ go build .
+$ ./server -host=localhost:3306 -user=root -password=root -scheme=grpc-todo http-port=9090 -grpc-port=8080
+```
+
+From another terminal run
+
+```bash
+$ cd cmd/client
+$ go build .
+$ ./client-rest -server=http://localhost:9090
+```

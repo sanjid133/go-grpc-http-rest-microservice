@@ -10,6 +10,7 @@ import (
 
 	"github.com/sanjid133/go-grpc-http-rest-microservice/pkg/service/v1"
 	"github.com/sanjid133/go-grpc-http-rest-microservice/pkg/protocol/grpc"
+	"github.com/sanjid133/go-grpc-http-rest-microservice/pkg/protocol/rest"
 )
 
 type Database struct {
@@ -20,8 +21,9 @@ type Database struct {
 }
 
 type Config struct {
-	Port string
-	DB Database
+	GRPCPort string
+	HTTPPort string
+	DB       Database
 }
 
 func RunServer() error  {
@@ -29,7 +31,8 @@ func RunServer() error  {
 
 	var cfg Config
 	cfg.DB = Database{}
-	flag.StringVar(&cfg.Port, "grpc-port", "8080", "grpc port to bind")
+	flag.StringVar(&cfg.GRPCPort, "grpc-port", "8080", "grpc port to bind")
+	flag.StringVar(&cfg.HTTPPort, "http-port", "9090", "grpc port to bind")
 	flag.StringVar(&cfg.DB.Host, "host", "localhost", "database host")
 	flag.StringVar(&cfg.DB.User, "user", "", "database user")
 	flag.StringVar(&cfg.DB.Password, "password", "", "database password")
@@ -53,7 +56,11 @@ func RunServer() error  {
 	defer db.Close()
 
 	v1api := v1.NewToDoServiceServer(db)
-	return grpc.RunServer(ctx, v1api, cfg.Port)
+	go func() {
+		rest.RunServer(ctx, cfg.GRPCPort, cfg.HTTPPort)
+	}()
+
+	return grpc.RunServer(ctx, v1api, cfg.GRPCPort)
 }
 
 
